@@ -129,9 +129,9 @@ export default function Search() {
                         </li>
                     ))}
                 </ul> */}
-                <ul className='flex flex-wrap ml-24'>
+                <ul className='flex flex-wrap mx-10'>
                     {songsDetails.map((detail, idx) => (
-                        <li key={idx} className='m-2 mt-10 bg-gray-200 text-black rounded shadow-md  h-auto p-10 w-80'>
+                        <li key={idx} className='m-2 mt-10 bg-gray-200 text-black rounded shadow-md  h-auto p-10 w-85'>
                             <img src={detail.cover} alt={detail.title} />
                             <div className='mt-2'>Title: {detail.title}</div>
                             <div>Duration: {detail.duration}</div>
