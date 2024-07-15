@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+<button>play</button>
+     
+
+    <div>
+        
+    </div>
+
+    <script>
+      
+        
+        
+
+        document.querySelector('button').addEventListener('click',function playSong(){
+            const url= 'https://cdn-preview-f.dzcdn.net/stream/c-f6268077f735e57a1c3e5adc2e61ec11-3.mp3'
+
+            const song= new Audio(url);
+            song.play();
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
