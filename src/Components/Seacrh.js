@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-
+import { throttle } from 'lodash';
 export default function Search() {
     const [songs, setSongs] = useState([]);
     const [singer, setSinger] = useState('');
@@ -136,9 +136,12 @@ export default function Search() {
                             <div className='mt-2'>Title: {detail.title}</div>
                             <div>Duration: {detail.duration}</div>
                             <div>Artist: {detail.artist}</div>
-                            <button className='bg-green-950 text-white mt-3 w-20 rounded h-8'
+                            {/* <button className='bg-green-950 text-white mt-3 w-20 rounded h-8'
                                 onClick={() => playSong(detail.preview)}
-                            >Play</button>
+                            >Play</button> */}
+                            <audio controls>
+                                <source src={detail.preview} type="audio/mpeg"/>
+                            </audio>
                         </li>
                     ))}
                 </ul>
