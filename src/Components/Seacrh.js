@@ -134,13 +134,13 @@ export default function Search() {
                         <li key={idx} className='m-2 mt-10 bg-gray-200 text-black rounded shadow-md  h-auto p-10 w-85'>
                             <img src={detail.cover} alt={detail.title} />
                             <div className='mt-2'>Title: {detail.title}</div>
-                            <div>Duration: {detail.duration}</div>
+                            {/* <div>Duration: {detail.duration}</div> */}
                             <div>Artist: {detail.artist}</div>
                             {/* <button className='bg-green-950 text-white mt-3 w-20 rounded h-8'
                                 onClick={() => playSong(detail.preview)}
                             >Play</button> */}
-                            <audio controls>
-                                <source src={detail.preview} type="audio/mpeg"/>
+                            <audio controls className='text-white mt-3 w-64 rounded h-8'>
+                                <source  src={detail.preview} type="audio/mpeg"/>
                             </audio>
                         </li>
                     ))}
