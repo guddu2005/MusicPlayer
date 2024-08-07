@@ -160,7 +160,7 @@ export default function Search() {
     const [songsDetails, setSongsDetails] = useState([]);
     const [newAudio, setNewAudio] = useState([]);
     const [current, setCurrent] = useState(false);
-
+    const [playingSong, setPlayingSong] = useState(null);
     useEffect(() => {
         if (current) {
             (async function fetchSinger() {
@@ -247,13 +247,31 @@ export default function Search() {
         setSinger(e.target.value);
     };
 
-    const playSong = (url) => {
-        const song = new Audio(url);
-        song.pause();
-        song.currentTime = 0;
-        song.play();
+    const playSong = (url, idx) => {
+        if (playingSong && playingSong.index === idx) {
+            if (playingSong.audio.paused) {
+                playingSong.audio.play();
+            } else {
+                playingSong.audio.pause();
+            }
+        } else {
+            if (playingSong && playingSong.audio) {
+                playingSong.audio.pause();
+                playingSong.audio.currentTime = 0;
+            }
+    
+            const song = new Audio(url);
+            song.play();
+    
+            setPlayingSong({ index: idx, audio: song });
+    
+            song.addEventListener('ended', () => {
+                setPlayingSong(null);
+            });
+        }
     };
-
+    
+    
     return (
         <div className='bg-gray-100 h-screen p-8'>
             <form onSubmit={changeSingerName} className='mb-6'>
@@ -273,18 +291,25 @@ export default function Search() {
             <div className='text-center'>
                 <ul className='flex flex-wrap justify-center'>
                     {songsDetails.map((detail, idx) => (
-                        <li key={idx} className='m-4 bg-gray-200 text-black rounded-lg shadow-lg p-6 w-72'>
+                        <li key={idx} className={`m-4 bg-gray-200 text-black rounded-lg shadow-lg p-6 w-72 ${playingSong && playingSong.index !== idx ? 'opacity-50 cursor-not-allowed' : ''}`}>
                             <img src={detail.cover} alt={detail.title} className='rounded-lg mb-4' />
                             <div className='text-lg font-medium'>{detail.title}</div>
                             <div className='text-sm text-gray-600 mb-2'>Artist: {detail.artist}</div>
-                            <audio controls className='w-full mt-2'>
-                                <source src={detail.preview} type="audio/mpeg" />
-                            </audio>
+                            <button 
+                                className={`w-full mt-2 py-1 px-2 rounded ${playingSong && playingSong.index === idx ? 'bg-red-500' : 'bg-green-500'} text-white`}
+                                onClick={() => playSong(detail.preview, idx)}
+                                disabled={playingSong && playingSong.index !== idx}
+                            >
+                                {playingSong && playingSong.index === idx && !playingSong.audio.paused ? 'Pause' : 'Play'}
+                            </button>
                         </li>
                     ))}
                 </ul>
             </div>
         </div>
     );
+    
+    
+    
 }
 
