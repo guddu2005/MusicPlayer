@@ -8,6 +8,7 @@ export default function Search() {
     const [newAudio, setNewAudio] = useState([]);
     const [current, setCurrent] = useState(false);
     const [playingSong, setPlayingSong] = useState(null);
+    const [isPlaying, setIsPlaying] = useState(false);
     useEffect(() => {
         if (current) {
             (async function fetchSinger() {
@@ -94,7 +95,34 @@ export default function Search() {
         setSinger(e.target.value);
     };
 
-    const playSong = (url, idx) => {
+//     const playSong = (url, idx) => {
+//     if (playingSong && playingSong.index !== idx) {
+//         playingSong.audio.pause();
+//         playingSong.audio.currentTime = 0;
+//     }
+
+//     if (playingSong && playingSong.index === idx) {
+//         if (playingSong.audio.paused) {
+//             playingSong.audio.play();
+//         } else {
+//             playingSong.audio.pause();
+//         }
+//     } else {
+//         const song = new Audio(url);
+//         song.play();
+
+//         setPlayingSong({ index: idx, audio: song });
+
+//         song.addEventListener('ended', () => {
+//             setPlayingSong(null);
+//         });
+
+//         song.addEventListener('pause', () => {
+//             setPlayingSong(null);
+//         });
+//     }
+// };
+const playSong = (url, idx) => {
     if (playingSong && playingSong.index !== idx) {
         playingSong.audio.pause();
         playingSong.audio.currentTime = 0;
@@ -103,25 +131,30 @@ export default function Search() {
     if (playingSong && playingSong.index === idx) {
         if (playingSong.audio.paused) {
             playingSong.audio.play();
+            setIsPlaying(true);
         } else {
             playingSong.audio.pause();
+            setIsPlaying(false);
         }
-    } else {
-        const song = new Audio(url);
-        song.play();
-
-        setPlayingSong({ index: idx, audio: song });
-
-        song.addEventListener('ended', () => {
-            setPlayingSong(null);
-        });
-
-        song.addEventListener('pause', () => {
-            setPlayingSong(null);
-        });
+        return;
     }
-};
 
+    const song = new Audio(url);
+    song.play();
+
+    setPlayingSong({ index: idx, audio: song });
+    setIsPlaying(true);
+
+    song.addEventListener('ended', () => {
+        setPlayingSong(null);
+        setIsPlaying(false);
+    });
+
+    song.addEventListener('pause', () => {
+        setPlayingSong(null);
+        setIsPlaying(false);
+    });
+};
     return (
         <div className='bg-gray-100 h-screen p-8'>
             <form onSubmit={changeSingerName} className='mb-6'>
@@ -150,6 +183,7 @@ export default function Search() {
                                 className={`w-full mt-2 py-1 px-2 rounded ${playingSong && playingSong.index === idx ? 'bg-red-600' : 'bg-green-600'} text-white`}
                                 src={detail.preview}
                                 onClick={() => playSong(detail.preview, idx)}
+                                disabled={isPlaying && playingSong?.index !== idx}
                             >
                                {playingSong && playingSong.index === idx && !playingSong.audio.paused ? 'Pause' : 'Play'}
                             </button>
